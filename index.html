@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중학 과학 개념 마스터: 힘과 운동</title>
+    <!-- Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans KR & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- 상단 헤더 -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-indigo-600 tracking-wider uppercase block">중학교 과학 복습</span>
+                    <h1 class="text-lg sm:text-xl font-bold text-slate-900 leading-tight">힘과 운동 개념 퀴즈</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="header-stats-btn" type="button" class="hidden text-xs sm:text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
+                    누적 분석
+                </button>
+                <div id="header-progress" class="hidden text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full">
+                    1 / 6
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="flex-grow max-w-3xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col justify-center">
+        
+        <!-- 1. 시작 화면 -->
+        <section id="start-screen" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-10 text-center transition-all">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">힘과 운동, 얼마나 알고 있나요?</h2>
+            <p class="text-slate-600 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+                중력, 탄성력, 마찰력, 부력부터 알짜힘과 등속 운동까지!<br class="hidden sm:inline">
+                핵심 개념 6문제를 풀고 부족한 부분을 확실하게 복습해 보세요.
+            </p>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8 text-left max-w-xl mx-auto">
+                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+                    <span class="text-xs font-bold text-indigo-600 block mb-1">문항 수</span>
+                    <span class="text-sm font-semibold text-slate-800">객관식 6문제</span>
+                </div>
+                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+                    <span class="text-xs font-bold text-indigo-600 block mb-1">학습 분석</span>
+                    <span class="text-sm font-semibold text-slate-800">개념별 정답률 그래프</span>
+                </div>
+                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 col-span-2 sm:col-span-1">
+                    <span class="text-xs font-bold text-indigo-600 block mb-1">맞춤 복습</span>
+                    <span class="text-sm font-semibold text-slate-800">취약 개념 집중 풀이</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <button id="start-btn" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-2xl shadow-md hover:shadow-lg transition-all text-base sm:text-lg cursor-pointer">
+                    전체 개념 복습 시작하기
+                </button>
+                <button id="start-weak-btn" class="hidden w-full sm:w-auto px-6 py-4 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold rounded-2xl shadow-md hover:shadow-lg transition-all text-base sm:text-lg cursor-pointer">
+                    취약 개념 집중 복습
+                </button>
+            </div>
+
+            <!-- 누적 학습 기록 요약 배너 (기록이 있을 때만 시작 화면에 표시) -->
+            <div id="start-history-banner" class="hidden mt-8 pt-6 border-t border-slate-100 max-w-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+                <div class="text-slate-600">
+                    누적 풀이 기록이 저장되어 있습니다. (<span id="start-total-attempts" class="font-bold text-indigo-600">0</span>회 응시)
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="view-saved-analytics-btn" type="button" class="font-bold text-indigo-600 hover:text-indigo-800 underline underline-offset-2 cursor-pointer">
+                        누적 분석 보기
+                    </button>
+                    <span class="text-slate-300">|</span>
+                    <button id="start-reset-btn" type="button" class="font-semibold text-rose-500 hover:text-rose-700 cursor-pointer">
+                        기록 초기화
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 퀴즈 화면 -->
+        <section id="quiz-screen" class="hidden bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8 transition-all">
+            <!-- 모드 표시 배지 -->
+            <div id="quiz-mode-banner" class="hidden mb-4 px-3.5 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm font-bold flex items-center justify-between">
+                <span>🎯 취약 개념 집중 복습 모드</span>
+                <button id="exit-weak-mode-btn" type="button" class="text-amber-700 underline hover:text-amber-900 cursor-pointer">전체 풀기로 전환</button>
+            </div>
+
+            <!-- 진행률 바 -->
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6">
+                <div id="progress-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-300" style="width: 16.66%"></div>
+            </div>
+
+            <!-- 개념 태그 및 문항 번호 -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <span id="concept-tag" class="inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                    #개념태그
+                </span>
+                <span id="question-number" class="text-sm font-semibold text-slate-400">
+                    문제 1 / 6
+                </span>
+            </div>
+
+            <!-- 문제 텍스트 -->
+            <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug mb-6">
+                문제 내용이 여기에 표시됩니다.
+            </h3>
+
+            <!-- 선택지 목록 -->
+            <div id="options-container" class="space-y-3 mb-6">
+                <!-- 자바스크립트로 동적 생성 -->
+            </div>
+
+            <!-- 정답 및 해설 피드백 박스 (답변 선택 후 표시) -->
+            <div id="feedback-box" class="hidden rounded-2xl p-4 sm:p-5 mb-6 border transition-all">
+                <div class="flex items-start gap-3">
+                    <div id="feedback-icon" class="mt-0.5 flex-shrink-0"></div>
+                    <div>
+                        <h4 id="feedback-title" class="font-bold text-base mb-1">정답입니다!</h4>
+                        <p id="feedback-explanation" class="text-sm sm:text-base leading-relaxed text-slate-700">
+                            해설 내용이 여기에 표시됩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 다음 버튼 영역 -->
+            <div class="flex justify-end">
+                <button id="next-btn" class="hidden w-full sm:w-auto px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2">
+                    <span id="next-btn-text">다음 문제</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. 결과 화면 -->
+        <section id="result-screen" class="hidden space-y-6">
+            <!-- 점수 요약 카드 -->
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-10 text-center">
+                <span class="inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 mb-3">
+                    복습 완료 리포트
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">수고하셨습니다!</h2>
+                <p id="result-message" class="text-slate-600 mb-6">결과 메시지가 표시됩니다.</p>
+
+                <div class="inline-flex items-baseline justify-center bg-slate-50 border border-slate-200 rounded-3xl px-8 py-6 mb-6">
+                    <span id="score-display" class="text-5xl sm:text-6xl font-extrabold text-indigo-600">0</span>
+                    <span class="text-xl sm:text-2xl font-bold text-slate-400 ml-2">/ 100점</span>
+                </div>
+
+                <div class="flex justify-center gap-6 text-sm font-semibold mb-8">
+                    <div class="text-emerald-600 bg-emerald-50 px-4 py-2 rounded-xl">
+                        맞힌 문제: <span id="correct-count">0</span>개
+                    </div>
+                    <div class="text-rose-600 bg-rose-50 px-4 py-2 rounded-xl">
+                        틀린 문제: <span id="wrong-count">0</span>개
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button id="restart-btn" class="w-full sm:w-auto px-7 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-sm transition-all cursor-pointer">
+                        전체 6문제 다시 풀기
+                    </button>
+                    <button id="retry-weak-btn" class="hidden w-full sm:w-auto px-7 py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-sm transition-all cursor-pointer">
+                        취약 개념만 다시 풀기 (<span id="weak-question-count">0</span>문항)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 개념별 누적 정답률 막대그래프 및 취약 개념 정렬 섹션 -->
+            <div id="analytics-section" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-6 bg-indigo-600 rounded-full"></span>
+                        <h3 class="text-xl font-bold text-slate-900">개념별 누적 정답률 분석</h3>
+                    </div>
+                    <button id="reset-history-btn" type="button" class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        학습 기록 초기화
+                    </button>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-500 mb-6">
+                    브라우저에 저장된 누적 학습 기록을 바탕으로 <strong>정답률이 낮은 취약 개념 순</strong>으로 정렬됩니다.
+                </p>
+
+                <!-- 개념별 막대그래프 컨테이너 -->
+                <div id="concept-chart-container" class="space-y-4">
+                    <!-- 자바스크립트로 동적 생성 -->
+                </div>
+            </div>
+
+            <!-- 틀린 문제 목록 (오답 노트) -->
+            <div id="wrong-answers-section" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="w-2.5 h-6 bg-rose-500 rounded-full"></span>
+                    <h3 class="text-xl font-bold text-slate-900">틀린 문제 다시 보기 (오답 노트)</h3>
+                </div>
+                <div id="wrong-list-container" class="space-y-4">
+                    <!-- 틀린 문제 카드가 동적으로 삽입됨 -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="py-6 text-center text-xs text-slate-400">
+        중학교 과학 교과 과정 기반 개념 복습 웹앱
+    </footer>
+
+    <!-- 학습 기록 초기화 확인 모달 (alert/confirm 대신 커스텀 모달 사용) -->
+    <div id="reset-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-xl border border-slate-200">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h4 class="text-lg sm:text-xl font-bold text-slate-900 mb-2">학습 기록을 초기화할까요?</h4>
+            <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                저장된 모든 개념별 누적 정답률과 취약 개념 기록이 영구적으로 삭제되며, 되돌릴 수 없습니다.
+            </p>
+            <div class="flex items-center justify-end gap-2.5">
+                <button id="cancel-reset-btn" type="button" class="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer">
+                    취소
+                </button>
+                <button id="confirm-reset-btn" type="button" class="px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors cursor-pointer">
+                    네, 초기화합니다
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * ============================================================================
+         * [과학 개념 및 문제 데이터 영역]
+         * 실제 중학교 과학 교육과정(힘과 운동 단원)의 개념이 정확한지 쉽게 검토하고
+         * 수정할 수 있도록 UI 로직과 완전히 분리된 순수 데이터 배열입니다.
+         * ============================================================================
+         */
+        const QUIZ_DATA = [
+            {
+                id: 1,
+                conceptTag: "중력과 질량·무게",
+                question: "달에 간 우주비행사의 '질량'과 '무게'에 대한 설명으로 옳은 것은? (단, 달의 중력은 지구의 약 1/6이다.)",
+                options: [
+                    "질량과 무게 모두 지구에서와 같다.",
+                    "질량은 지구에서와 같고, 무게는 지구의 1/6이 된다.",
+                    "질량은 지구의 1/6이 되고, 무게는 지구에서와 같다.",
+                    "질량과 무게 모두 지구의 1/6이 된다."
+                ],
+                answerIndex: 1,
+                explanation: "질량은 물체의 고유한 양이므로 측정 장소가 바뀌어도 변하지 않지만, 무게는 물체에 작용하는 중력의 크기이므로 중력이 1/6인 달에서는 무게도 1/6로 줄어듭니다."
+            },
+            {
+                id: 2,
+                conceptTag: "탄성력의 방향과 크기",
+                question: "용수철을 오른쪽으로 10 N의 힘으로 잡아당겨 정지해 있을 때, 용수철이 손에 작용하는 탄성력의 방향과 크기는?",
+                options: [
+                    "왼쪽 방향으로 10 N",
+                    "오른쪽 방향으로 10 N",
+                    "왼쪽 방향으로 5 N",
+                    "탄성력은 작용하지 않는다 (0 N)"
+                ],
+                answerIndex: 0,
+                explanation: "탄성력은 변형된 물체가 원래 모양으로 되돌아가려는 힘으로, 작용한 힘과 반대 방향(왼쪽)으로 작용하며 그 크기는 변형된 정도에 비례하므로 10 N입니다."
+            },
+            {
+                id: 3,
+                conceptTag: "마찰력의 크기 조건",
+                question: "수평면 위에 놓인 나무 도막을 끌 때, 마찰력의 크기를 크게 만드는 방법으로 가장 옳은 것은?",
+                options: [
+                    "나무 도막 아래에 바퀴를 단다.",
+                    "바닥에 윤활유(기름)를 칠한다.",
+                    "나무 도막 위에 무거운 추를 올려놓는다.",
+                    "나무 도막을 세워서 바닥과 닿는 넓이를 줄인다."
+                ],
+                answerIndex: 2,
+                explanation: "마찰력의 크기는 접촉면이 거칠수록, 그리고 접촉면을 누르는 힘(물체의 무게)이 클수록 커집니다. 접촉면의 넓이와 마찰력의 크기는 관계가 없습니다."
+            },
+            {
+                id: 4,
+                conceptTag: "부력의 방향과 크기",
+                question: "물속에 완전히 잠긴 돌멩이를 더 깊은 곳으로 가라앉혔을 때, 돌멩이가 받는 부력의 변화로 옳은 것은?",
+                options: [
+                    "수압이 세지므로 부력이 커진다.",
+                    "수면에서 멀어지므로 부력이 작아진다.",
+                    "물속에 잠긴 부피가 같으므로 부력의 크기는 변하지 않는다.",
+                    "부력의 방향이 위쪽에서 아래쪽으로 바뀐다."
+                ],
+                answerIndex: 2,
+                explanation: "부력은 중력과 반대 방향(위쪽)으로 작용하며, 그 크기는 물체가 유체 속에 잠긴 부피에 비례합니다. 이미 완전히 잠겼다면 깊이가 깊어져도 잠긴 부피가 같으므로 부력은 일정합니다."
+            },
+            {
+                id: 5,
+                conceptTag: "알짜힘(합력) 계산",
+                question: "수평면 위의 상자에 동쪽으로 15 N, 서쪽으로 6 N의 힘이 동시에 작용할 때, 이 상자에 작용하는 알짜힘의 크기와 방향은?",
+                options: [
+                    "동쪽으로 21 N",
+                    "서쪽으로 21 N",
+                    "동쪽으로 9 N",
+                    "서쪽으로 9 N"
+                ],
+                answerIndex: 2,
+                explanation: "한 물체에 반대 방향으로 두 힘이 동시에 작용할 때, 알짜힘의 크기는 큰 힘에서 작은 힘을 뺀 값(15 N - 6 N = 9 N)이고, 방향은 큰 힘의 방향(동쪽)과 같습니다."
+            },
+            {
+                id: 6,
+                conceptTag: "등속 운동의 특징",
+                question: "마찰이 없는 얼음판 위에서 퍽을 한 번 쳤더니 일직선 위를 일정한 빠르기로 미끄러져 갔다. 이 운동에 대한 설명으로 옳은 것은?",
+                options: [
+                    "운동 방향으로 일정한 크기의 힘이 계속 작용하고 있다.",
+                    "시간이 지날수록 이동 거리가 일정하게 증가한다.",
+                    "속력이 일정하게 증가하는 운동이다.",
+                    "물체에 작용하는 알짜힘의 크기가 점점 커진다."
+                ],
+                answerIndex: 1,
+                explanation: "빠르기와 운동 방향이 모두 변하지 않는 등속 운동은 물체에 작용하는 알짜힘이 0일 때 나타나며, 이동 거리는 시간에 비례하여 일정하게 증가합니다."
+            }
+        ];
+
+        /**
+         * ============================================================================
+         * [localStorage 기반 누적 학습 기록 관리 모듈]
+         * - 개념 태그별 시도 횟수(attempts), 정답 횟수(correct), 오답 문항 ID(missedIds) 저장
+         * ============================================================================
+         */
+        const STORAGE_KEY = 'middle_school_science_force_motion_history_v1';
+
+        function createDefaultHistory() {
+            const conceptStats = {};
+            QUIZ_DATA.forEach(q => {
+                conceptStats[q.conceptTag] = {
+                    attempts: 0,
+                    correct: 0
+                };
+            });
+            return {
+                conceptStats,
+                missedQuestionIds: [], // 최근 또는 누적 오답 문제 ID 목록
+                totalQuizzesCompleted: 0
+            };
+        }
+
+        function loadHistory() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return createDefaultHistory();
+                const parsed = JSON.parse(raw);
+                const base = createDefaultHistory();
+
+                // QUIZ_DATA의 모든 개념 태그가 누락 없이 존재하도록 병합
+                Object.keys(base.conceptStats).forEach(tag => {
+                    if (parsed.conceptStats && parsed.conceptStats[tag]) {
+                        base.conceptStats[tag] = {
+                            attempts: Number(parsed.conceptStats[tag].attempts) || 0,
+                            correct: Number(parsed.conceptStats[tag].correct) || 0
+                        };
+                    }
+                });
+
+                base.missedQuestionIds = Array.isArray(parsed.missedQuestionIds)
+                    ? parsed.missedQuestionIds.filter(id => QUIZ_DATA.some(q => q.id === id))
+                    : [];
+                base.totalQuizzesCompleted = Number(parsed.totalQuizzesCompleted) || 0;
+                return base;
+            } catch (e) {
+                console.error("학습 기록을 불러오는 중 오류 발생:", e);
+                return createDefaultHistory();
+            }
+        }
+
+        function saveHistory(historyObj) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(historyObj));
+            } catch (e) {
+                console.error("학습 기록 저장 중 오류 발생:", e);
+            }
+        }
+
+        function recordQuestionAttempt(questionObj, isCorrect) {
+            const history = loadHistory();
+            const tag = questionObj.conceptTag;
+
+            if (!history.conceptStats[tag]) {
+                history.conceptStats[tag] = { attempts: 0, correct: 0 };
+            }
+
+            history.conceptStats[tag].attempts += 1;
+            if (isCorrect) {
+                history.conceptStats[tag].correct += 1;
+                // 맞힌 문제는 오답 ID 목록에서 제거하여 마스터 처리
+                history.missedQuestionIds = history.missedQuestionIds.filter(id => id !== questionObj.id);
+            } else {
+                // 틀린 문제는 오답 ID 목록에 추가 (중복 방지)
+                if (!history.missedQuestionIds.includes(questionObj.id)) {
+                    history.missedQuestionIds.push(questionObj.id);
+                }
+            }
+
+            saveHistory(history);
+        }
+
+        function incrementCompletedCount() {
+            const history = loadHistory();
+            history.totalQuizzesCompleted += 1;
+            saveHistory(history);
+        }
+
+        function clearHistory() {
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (e) {
+                console.error("학습 기록 초기화 오류:", e);
+            }
+        }
+
+        /**
+         * 개념별 정답률 계산 및 정답률 낮은 순 정렬 헬퍼
+         * - 시도 기록이 있는 개념을 우선으로 정답률 오름차순(낮은 순) 정렬
+         * - 미시도 개념은 하단에 배치
+         */
+        function getSortedConceptAnalytics() {
+            const history = loadHistory();
+            const list = QUIZ_DATA.map(q => {
+                const tag = q.conceptTag;
+                const stat = history.conceptStats[tag] || { attempts: 0, correct: 0 };
+                const accuracy = stat.attempts > 0 ? Math.round((stat.correct / stat.attempts) * 100) : null;
+                return {
+                    questionId: q.id,
+                    conceptTag: tag,
+                    attempts: stat.attempts,
+                    correct: stat.correct,
+                    accuracy
+                };
+            });
+
+            return list.sort((a, b) => {
+                // 둘 다 풀이 기록이 있는 경우: 정답률 낮은 순 (오름차순)
+                if (a.accuracy !== null && b.accuracy !== null) {
+                    if (a.accuracy !== b.accuracy) return a.accuracy - b.accuracy;
+                    // 정답률이 같으면 시도 횟수가 많은 순
+                    return b.attempts - a.attempts;
+                }
+                // 풀이 기록이 있는 항목을 미시도 항목보다 먼저 표시
+                if (a.accuracy !== null && b.accuracy === null) return -1;
+                if (a.accuracy === null && b.accuracy !== null) return 1;
+                return a.questionId - b.questionId;
+            });
+        }
+
+        /**
+         * 취약 개념 문제 필터링:
+         * 정답률이 100% 미만이거나 오답 기록이 있는 개념의 문제를 정답률 낮은 순으로 추출
+         */
+        function getWeakQuestions() {
+            const sortedAnalytics = getSortedConceptAnalytics();
+            const weakTags = sortedAnalytics
+                .filter(item => item.attempts > 0 && item.accuracy < 100)
+                .map(item => item.conceptTag);
+
+            if (weakTags.length === 0) return [];
+
+            // 취약 개념 순서(정답률 낮은 순)대로 문제 배열 정렬 반환
+            const weakQuestions = [];
+            weakTags.forEach(tag => {
+                const found = QUIZ_DATA.find(q => q.conceptTag === tag);
+                if (found) weakQuestions.push(found);
+            });
+            return weakQuestions;
+        }
+
+        /**
+         * ============================================================================
+         * [애플리케이션 상태 및 UI 렌더링 로직]
+         * ============================================================================
+         */
+        const state = {
+            activeQuestions: [...QUIZ_DATA], // 현재 세션에서 풀 문제 배열 (전체 6문제 또는 취약 개념 문제)
+            isWeakMode: false,
+            currentIndex: 0,
+            userAnswers: [], // 현재 세션에서 사용자가 선택한 보기 인덱스 저장
+            isAnswered: false
+        };
+
+        // DOM 요소 참조
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const headerProgress = document.getElementById('header-progress');
+        const headerStatsBtn = document.getElementById('header-stats-btn');
+
+        const startBtn = document.getElementById('start-btn');
+        const startWeakBtn = document.getElementById('start-weak-btn');
+        const startHistoryBanner = document.getElementById('start-history-banner');
+        const startTotalAttempts = document.getElementById('start-total-attempts');
+        const viewSavedAnalyticsBtn = document.getElementById('view-saved-analytics-btn');
+        const startResetBtn = document.getElementById('start-reset-btn');
+
+        const quizModeBanner = document.getElementById('quiz-mode-banner');
+        const exitWeakModeBtn = document.getElementById('exit-weak-mode-btn');
+
+        const nextBtn = document.getElementById('next-btn');
+        const nextBtnText = document.getElementById('next-btn-text');
+        const restartBtn = document.getElementById('restart-btn');
+        const retryWeakBtn = document.getElementById('retry-weak-btn');
+        const weakQuestionCount = document.getElementById('weak-question-count');
+
+        const resetHistoryBtn = document.getElementById('reset-history-btn');
+        const resetModal = document.getElementById('reset-modal');
+        const cancelResetBtn = document.getElementById('cancel-reset-btn');
+        const confirmResetBtn = document.getElementById('confirm-reset-btn');
+
+        const progressBar = document.getElementById('progress-bar');
+        const conceptTag = document.getElementById('concept-tag');
+        const questionNumber = document.getElementById('question-number');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackExplanation = document.getElementById('feedback-explanation');
+
+        // 이벤트 리스너 등록
+        startBtn.addEventListener('click', () => startQuiz(false));
+        startWeakBtn.addEventListener('click', () => startQuiz(true));
+        exitWeakModeBtn.addEventListener('click', () => startQuiz(false));
+        nextBtn.addEventListener('click', handleNextQuestion);
+        restartBtn.addEventListener('click', () => startQuiz(false));
+        retryWeakBtn.addEventListener('click', () => startQuiz(true));
+
+        viewSavedAnalyticsBtn.addEventListener('click', () => showResults(true));
+        headerStatsBtn.addEventListener('click', () => showResults(true));
+
+        // 초기화 모달 제어
+        resetHistoryBtn.addEventListener('click', openResetModal);
+        startResetBtn.addEventListener('click', openResetModal);
+        cancelResetBtn.addEventListener('click', closeResetModal);
+        confirmResetBtn.addEventListener('click', handleConfirmReset);
+        resetModal.addEventListener('click', (e) => {
+            if (e.target === resetModal) closeResetModal();
+        });
+
+        // 초기 진입 시 저장된 기록 확인 및 시작 화면 UI 갱신
+        function updateStartScreenState() {
+            const history = loadHistory();
+            const weakQuestions = getWeakQuestions();
+            const hasAnyAttempts = Object.values(history.conceptStats).some(s => s.attempts > 0);
+
+            if (hasAnyAttempts) {
+                startHistoryBanner.classList.remove('hidden');
+                headerStatsBtn.classList.remove('hidden');
+                startTotalAttempts.textContent = history.totalQuizzesCompleted > 0
+                    ? history.totalQuizzesCompleted
+                    : Object.values(history.conceptStats).reduce((acc, cur) => acc + cur.attempts, 0) + '문항';
+            } else {
+                startHistoryBanner.classList.add('hidden');
+                headerStatsBtn.classList.add('hidden');
+            }
+
+            if (weakQuestions.length > 0) {
+                startWeakBtn.classList.remove('hidden');
+                startWeakBtn.textContent = `취약 개념 집중 복습 (${weakQuestions.length}문항)`;
+            } else {
+                startWeakBtn.classList.add('hidden');
+            }
+        }
+
+        // 퀴즈 시작 및 초기화 (weakOnly가 true이면 취약 개념 문제만 출제)
+        function startQuiz(weakOnly = false) {
+            const weakList = getWeakQuestions();
+            if (weakOnly && weakList.length > 0) {
+                state.activeQuestions = weakList;
+                state.isWeakMode = true;
+            } else {
+                state.activeQuestions = [...QUIZ_DATA];
+                state.isWeakMode = false;
+            }
+
+            state.currentIndex = 0;
+            state.userAnswers = [];
+            state.isAnswered = false;
+
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            headerProgress.classList.remove('hidden');
+
+            if (state.isWeakMode) {
+                quizModeBanner.classList.remove('hidden');
+            } else {
+                quizModeBanner.classList.add('hidden');
+            }
+
+            renderQuestion();
+        }
+
+        // 현재 문제 화면 렌더링
+        function renderQuestion() {
+            try {
+                const currentQ = state.activeQuestions[state.currentIndex];
+                const totalQ = state.activeQuestions.length;
+                state.isAnswered = false;
+
+                // 상단 및 진행률 바 업데이트
+                headerProgress.textContent = `${state.currentIndex + 1} / ${totalQ}`;
+                questionNumber.textContent = `문제 ${state.currentIndex + 1} / ${totalQ}`;
+                progressBar.style.width = `${((state.currentIndex + 1) / totalQ) * 100}%`;
+
+                // 개념 태그 및 질문 설정
+                conceptTag.textContent = `#${currentQ.conceptTag}`;
+                questionText.textContent = `${state.currentIndex + 1}. ${currentQ.question}`;
+
+                // 피드백 박스 및 다음 버튼 숨김
+                feedbackBox.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+
+                // 선택지 버튼 생성
+                optionsContainer.innerHTML = '';
+                const optionLabels = ['①', '②', '③', '④'];
+
+                currentQ.options.forEach((optionText, idx) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 transition-all flex items-start gap-3 cursor-pointer group';
+                    button.innerHTML = `
+                        <span class="font-bold text-slate-500 group-hover:text-indigo-600 transition-colors">${optionLabels[idx]}</span>
+                        <span class="text-slate-800 font-medium leading-snug">${optionText}</span>
+                    `;
+                    button.addEventListener('click', () => selectOption(idx, button));
+                    optionsContainer.appendChild(button);
+                });
+            } catch (error) {
+                console.error("문제를 불러오는 중 오류가 발생했습니다:", error);
+            }
+        }
+
+        // 보기 선택 처리 및 개념별 통계 누적 저장
+        function selectOption(selectedIndex, selectedButton) {
+            if (state.isAnswered) return; // 중복 클릭 방지
+            state.isAnswered = true;
+
+            const currentQ = state.activeQuestions[state.currentIndex];
+            const isCorrect = selectedIndex === currentQ.answerIndex;
+            state.userAnswers.push(selectedIndex);
+
+            // 문제 풀 때마다 즉시 해당 개념 태그의 시도/정답 기록을 localStorage에 누적 저장
+            recordQuestionAttempt(currentQ, isCorrect);
+
+            const allOptionButtons = optionsContainer.querySelectorAll('button');
+
+            // 모든 선택지 스타일 업데이트 및 비활성화
+            allOptionButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50/40', 'cursor-pointer');
+                btn.classList.add('cursor-default');
+
+                if (idx === currentQ.answerIndex) {
+                    // 정답 보기 강조
+                    btn.classList.remove('border-slate-200');
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+                    btn.querySelector('span:first-child').classList.add('text-emerald-600');
+                } else if (idx === selectedIndex && !isCorrect) {
+                    // 오답 선택 보기 강조
+                    btn.classList.remove('border-slate-200');
+                    btn.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                    btn.querySelector('span:first-child').classList.add('text-rose-600');
+                } else {
+                    btn.classList.add('opacity-60');
+                }
+            });
+
+            // 피드백 영역 구성
+            feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'bg-rose-50', 'border-rose-200');
+            
+            if (isCorrect) {
+                feedbackBox.classList.add('bg-emerald-50', 'border-emerald-200');
+                feedbackTitle.textContent = '정답입니다! 훌륭해요.';
+                feedbackTitle.className = 'font-bold text-base mb-1 text-emerald-800';
+                feedbackIcon.innerHTML = `
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>`;
+            } else {
+                feedbackBox.classList.add('bg-rose-50', 'border-rose-200');
+                feedbackTitle.textContent = `아쉽네요! 정답은 '${currentQ.options[currentQ.answerIndex]}'입니다.`;
+                feedbackTitle.className = 'font-bold text-base mb-1 text-rose-800';
+                feedbackIcon.innerHTML = `
+                    <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>`;
+            }
+
+            feedbackExplanation.textContent = currentQ.explanation;
+
+            // 다음 버튼 텍스트 설정 및 표시
+            if (state.currentIndex === state.activeQuestions.length - 1) {
+                nextBtnText.textContent = '결과 및 누적 분석 보기';
+            } else {
+                nextBtnText.textContent = '다음 문제';
+            }
+            nextBtn.classList.remove('hidden');
+        }
+
+        // 다음 문제 이동 또는 결과 화면 전환
+        function handleNextQuestion() {
+            if (state.currentIndex < state.activeQuestions.length - 1) {
+                state.currentIndex++;
+                renderQuestion();
+            } else {
+                incrementCompletedCount();
+                showResults(false);
+            }
+        }
+
+        // 개념별 정답률 막대그래프 렌더링 (정답률 낮은 순 정렬)
+        function renderConceptBarChart() {
+            const chartContainer = document.getElementById('concept-chart-container');
+            const sortedConcepts = getSortedConceptAnalytics();
+            chartContainer.innerHTML = '';
+
+            sortedConcepts.forEach(item => {
+                const hasAttempts = item.attempts > 0;
+                const accuracyPct = hasAttempts ? item.accuracy : 0;
+
+                // 정답률 구간별 색상 및 상태 배지 지정
+                let barColorClass = 'bg-slate-300';
+                let badgeHtml = '<span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">미응시</span>';
+
+                if (hasAttempts) {
+                    if (accuracyPct < 50) {
+                        barColorClass = 'bg-rose-500';
+                        badgeHtml = '<span class="text-xs font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-md">취약 개념</span>';
+                    } else if (accuracyPct < 100) {
+                        barColorClass = 'bg-amber-500';
+                        badgeHtml = '<span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">보완 필요</span>';
+                    } else {
+                        barColorClass = 'bg-emerald-500';
+                        badgeHtml = '<span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">완벽 이해</span>';
+                    }
+                }
+
+                const row = document.createElement('div');
+                row.className = 'p-4 rounded-2xl bg-slate-50 border border-slate-100';
+                row.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-sm sm:text-base text-slate-800">#${item.conceptTag}</span>
+                            ${badgeHtml}
+                        </div>
+                        <div class="text-xs sm:text-sm font-bold text-slate-700">
+                            ${hasAttempts ? `${accuracyPct}% <span class="font-normal text-slate-400">(${item.correct}/${item.attempts}회 정답)</span>` : '기록 없음'}
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-200/80 h-3 rounded-full overflow-hidden">
+                        <div class="${barColorClass} h-full rounded-full transition-all duration-500" style="width: ${accuracyPct}%"></div>
+                    </div>
+                `;
+                chartContainer.appendChild(row);
+            });
+        }
+
+        // 최종 결과, 개념별 막대그래프 및 틀린 문제 목록 렌더링
+        function showResults(fromSavedView = false) {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            headerProgress.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const summaryCard = resultScreen.querySelector('div:first-child');
+
+            if (fromSavedView) {
+                // 시작 화면이나 헤더에서 '누적 분석 보기'로 바로 들어온 경우
+                summaryCard.classList.add('hidden');
+            } else {
+                summaryCard.classList.remove('hidden');
+
+                let correctCount = 0;
+                const wrongItems = [];
+
+                state.activeQuestions.forEach((q, idx) => {
+                    const userAns = state.userAnswers[idx];
+                    if (userAns === q.answerIndex) {
+                        correctCount++;
+                    } else {
+                        wrongItems.push({
+                            questionNumber: idx + 1,
+                            questionData: q,
+                            userSelectedIndex: userAns
+                        });
+                    }
+                });
+
+                const totalCount = state.activeQuestions.length;
+                const calculatedScore = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+
+                document.getElementById('score-display').textContent = calculatedScore;
+                document.getElementById('correct-count').textContent = correctCount;
+                document.getElementById('wrong-count').textContent = wrongItems.length;
+
+                // 점수대별 격려 메시지
+                const resultMessage = document.getElementById('result-message');
+                if (calculatedScore === 100) {
+                    resultMessage.textContent = state.isWeakMode
+                        ? '취약 개념 복습 문제를 모두 맞혔습니다! 완벽하게 극복했어요.'
+                        : '완벽합니다! 힘과 운동의 핵심 개념을 모두 정확히 이해하고 있네요.';
+                } else if (calculatedScore >= 65) {
+                    resultMessage.textContent = '잘했어요! 아래 개념별 정답률 그래프와 오답 노트로 헷갈린 개념을 복습해 보세요.';
+                } else {
+                    resultMessage.textContent = '조금 더 복습이 필요해요. 정답률이 낮은 취약 개념부터 다시 풀어보세요!';
+                }
+
+                // 틀린 문제 목록 렌더링
+                const wrongSection = document.getElementById('wrong-answers-section');
+                const wrongListContainer = document.getElementById('wrong-list-container');
+                wrongListContainer.innerHTML = '';
+
+                if (wrongItems.length === 0) {
+                    wrongSection.classList.add('hidden');
+                } else {
+                    wrongSection.classList.remove('hidden');
+                    wrongItems.forEach(item => {
+                        const q = item.questionData;
+                        const userChoiceText = q.options[item.userSelectedIndex];
+                        const correctChoiceText = q.options[q.answerIndex];
+
+                        const card = document.createElement('div');
+                        card.className = 'p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3';
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
+                                    #${q.conceptTag}
+                                </span>
+                                <span class="text-xs font-bold text-rose-600">문제 ${item.questionNumber}번</span>
+                            </div>
+                            <p class="font-bold text-slate-900 text-base leading-snug">
+                                ${item.questionNumber}. ${q.question}
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50 border border-rose-100 text-rose-800">
+                                    <span class="font-bold block text-xs text-rose-600 mb-0.5">내가 고른 답</span>
+                                    ${userChoiceText}
+                                </div>
+                                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-800">
+                                    <span class="font-bold block text-xs text-emerald-600 mb-0.5">정답</span>
+                                    ${correctChoiceText}
+                                </div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-700 leading-relaxed">
+                                <span class="font-bold text-indigo-600 mr-1">[개념 해설]</span> ${q.explanation}
+                            </div>
+                        `;
+                        wrongListContainer.appendChild(card);
+                    });
+                }
+            }
+
+            // 취약 개념 집중 복습 버튼 표시 여부 갱신
+            const weakQuestions = getWeakQuestions();
+            if (weakQuestions.length > 0) {
+                retryWeakBtn.classList.remove('hidden');
+                weakQuestionCount.textContent = weakQuestions.length;
+            } else {
+                retryWeakBtn.classList.add('hidden');
+            }
+
+            // 개념별 누적 정답률 막대그래프 렌더링
+            renderConceptBarChart();
+            updateStartScreenState();
+        }
+
+        // 초기화 확인 모달 열기/닫기/실행
+        function openResetModal() {
+            resetModal.classList.remove('hidden');
+        }
+
+        function closeResetModal() {
+            resetModal.classList.add('hidden');
+        }
+
+        function handleConfirmReset() {
+            clearHistory();
+            closeResetModal();
+
+            // 초기화 후 초기 시작 화면으로 깔끔하게 복귀
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            headerProgress.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+
+            updateStartScreenState();
+        }
+
+        // 페이지 로드 시 저장된 학습 기록 반영
+        updateStartScreenState();
+    </script>
+</body>
+</html>
